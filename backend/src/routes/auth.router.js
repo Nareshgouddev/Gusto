@@ -8,8 +8,8 @@ router.post("/user/logout", authcontroller.logoutUser);
 
 //Food patners
 
-router.post("/foodpatner/register", authcontroller.foodPatnerregister);
-router.post("/foodpatner/login", authcontroller.loginFoodpatner);
-router.post("/foodpatner/logout", authcontroller.logoutFoodpatner);
+router.post("/foodpartner/register", authcontroller.foodPartnerregister);
+router.post("/foodpartner/login", authcontroller.loginFoodpartner);
+router.post("/foodpartner/logout", authcontroller.logoutFoodpartner);
 
 module.exports = router;

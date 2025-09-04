@@ -8,6 +8,17 @@ const foodpatnerSchema = new mongoose.Schema(
       minLength: 2,
       maxLength: 30,
     },
+    contactName: {
+      type: String,
+      required: true,
+    },
+    Phone: {
+      type: Number,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -23,6 +34,6 @@ const foodpatnerSchema = new mongoose.Schema(
   }
 );
 
-const FoodpartnerModel = mongoose.model("Foodpatner", foodpatnerSchema);
+const FoodpartnerModel = mongoose.model("Foodpartner", foodpatnerSchema);
 
 module.exports = FoodpartnerModel;

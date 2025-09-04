@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
   }
   const User = await bcrypt.compare(password, user.password);
   if (!User) {
-    res.status().json({ message: "Ivalid email or password" });
+    res.status(400).json({ message: "Ivalid email or password" });
   }
   const token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
   res.cookie("token", token);
@@ -45,20 +45,23 @@ const logoutUser = async (req, res) => {
   res.status(200).json({ message: "Logout Succesfully" });
 };
 
-const foodPatnerregister = async (req, res) => {
-  const { fullName, email, password } = req.body;
+const foodPartnerregister = async (req, res) => {
+  const { fullName, email, password, contactName, Phone, address } = req.body;
   const isuserexist = await FoodpartnerModel.findOne({ email });
   if (isuserexist) {
-    res.status(400).json({ message: "Food patner already exist" });
+    return res.status(400).json({ message: "Food patner already exist" });
   }
   try {
     const hashpassword = await bcrypt.hash(password, 10);
-    const Foodpatner = await FoodpartnerModel.create({
+    const Foodpartner = await FoodpartnerModel.create({
       fullName,
       email,
       password: hashpassword,
+      contactName,
+      Phone,
+      address,
     });
-    const token = jwt.sign({ id: Foodpatner._id }, process.env.JWT_KEY);
+    const token = jwt.sign({ id: Foodpartner._id }, process.env.JWT_KEY);
     res.cookie("token", token);
     res.status(200).json({ message: "Food Patner created sucessfully" });
   } catch (err) {
@@ -66,7 +69,7 @@ const foodPatnerregister = async (req, res) => {
   }
 };
 
-const loginFoodpatner = async (req, res) => {
+const loginFoodpartner = async (req, res) => {
   const { email, password } = req.body;
 
   const Foodpatner = await FoodpartnerModel.findOne({ email });
@@ -82,7 +85,7 @@ const loginFoodpatner = async (req, res) => {
   res.status(200).json({ message: "Food patner Login succesfully" });
 };
 
-const logoutFoodpatner = async (req, res) => {
+const logoutFoodpartner = async (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logout Succesfully" });
 };
@@ -91,7 +94,7 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
-  foodPatnerregister,
-  loginFoodpatner,
-  logoutFoodpatner,
+  foodPartnerregister,
+  loginFoodpartner,
+  logoutFoodpartner,
 };
