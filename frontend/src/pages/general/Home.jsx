@@ -1,71 +1,116 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../../styles/Home.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import "../../styles/Reels.css";
+import "../../styles/Home.css";
 
-const VideoItem = ({ video, onVisitStore }) => {
+const Reel = ({ video }) => {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.7,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && videoRef.current) {
+          videoRef.current.play().catch(() => {}); // prevent autoplay errors
+        } else if (videoRef.current) {
+          videoRef.current.pause();
+        }
+      });
+    }, options);
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="video-item">
-      <video src={video.videoUrl} loop muted playsInline autoPlay />
-      <div className="video-overlay">
-        <p className="video-description">{video.description}</p>
-        <button
-          className="visit-store-btn"
-          onClick={() => onVisitStore(video.storeId)}
+    <div className="reel-item">
+      <video
+        ref={videoRef}
+        className="reel-video"
+        src={video.videoUrl}
+        loop
+        muted
+        playsInline
+        controls={false}
+      />
+      <div className="overlay-gradient" />
+      <div className="reel-content">
+        <p className="reel-description">{video.description}</p>
+        {/* ✅ Navigate to foodpartner/:id */}
+        <Link
+          to={`/foodpartner/${video.storeId}`}
+          className="visit-store-button"
         >
           Visit Store
-        </button>
+        </Link>
       </div>
     </div>
   );
 };
 
 const Home = () => {
-  const [videos, setVideos] = useState([]);
-  const containerRef = useRef(null);
+  const [reels, setReels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/food");
-  });
-  // Example data - replace with actual API call
-  useEffect(() => {
-    // Simulate fetching videos
-    setVideos([
-      {
-        id: 1,
-        videoUrl:
-          "https://ik.imagekit.io/ihetkdnj4/16e1f2af-7765-42eb-be6f-d65e094111ed_uz3t1C2mz",
-        description:
-          "Delicious burgers and fries made fresh daily. Try our special sauce that everyone's talking about!",
-        storeId: "store1",
-      },
-      {
-        id: 2,
-        videoUrl:
-          "https://ik.imagekit.io/ihetkdnj4/16e1f2af-7765-42eb-be6f-d65e094111ed_uz3t1C2mz",
-        description:
-          "Authentic Italian pizza made in wood-fired oven. Fresh ingredients imported from Italy.",
-        storeId: "store2",
-      },
-      // Add more videos as needed
-    ]);
+    const fetchReels = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get("http://localhost:3000/api/food", {
+          withCredentials: true,
+        });
+
+        console.log("Backend response:", response.data);
+
+        // ✅ set only the foodItems array
+        setReels(response.data.foodItems || []);
+      } catch (err) {
+        setError("Failed to load reels");
+        console.error(
+          "❌ Error fetching reels:",
+          err.response?.data || err.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReels();
   }, []);
 
-  const handleVisitStore = (storeId) => {
-    // Navigate to store page
-    console.log(`Visiting store: ${storeId}`);
-    // Add your navigation logic here
-  };
+  if (loading) return <div className="reels-container">Loading...</div>;
+  if (error) return <div className="reels-container">{error}</div>;
 
   return (
-    <div className="video-container" ref={containerRef}>
-      {videos.map((video) => (
-        <VideoItem
-          key={video.id}
-          video={video}
-          onVisitStore={handleVisitStore}
-        />
-      ))}
+    <div className="reels-container">
+      {Array.isArray(reels) && reels.length > 0 ? (
+        reels.map((reel) => (
+          <Reel
+            key={reel._id}
+            video={{
+              videoUrl: reel.video, // backend `video`
+              description: reel.name, // backend `name`
+              storeId: reel.foodPartner, // backend `foodPartner`
+            }}
+          />
+        ))
+      ) : (
+        <div>No reels available</div>
+      )}
     </div>
   );
 };

@@ -78,7 +78,7 @@ const FoodPartnerRegister = () => {
             <span className="label-text">Phone number</span>
             <input
               type="tel"
-              name="phone"
+              name="Phone"
               placeholder="+1 555-555-5555"
               aria-label="Phone number"
             />
