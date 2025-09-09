@@ -18,9 +18,9 @@ const registerUser = async (req, res) => {
     });
     const token = jwt.sign({ id: User._id }, process.env.JWT_KEY);
     res.cookie("token", token);
-    res.status(200).json({ message: "User created sucessfully" });
+    return res.status(200).json({ message: "User created sucessfully" });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -37,7 +37,7 @@ const loginUser = async (req, res) => {
   }
   const token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
   res.cookie("token", token);
-  res.status(200).json({ message: "Login succesfully" });
+  return res.status(200).json({ message: "Login succesfully" });
 };
 
 const logoutUser = async (req, res) => {
