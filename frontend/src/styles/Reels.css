@@ -1,3 +1,111 @@
+/* ReelView page styles — modern, minimal, mobile-first */
+.reel-page {
+  min-height: 100vh;
+  background: var(--gradient-soft, #f8fafc);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.reel-video-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  position: relative;
+  padding-bottom: 80px;
+}
+
+.reel-video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--muted-400);
+  height: 320px;
+  background: rgba(59,130,246,0.04);
+  border-radius: 18px;
+  margin: 24px 16px 0 16px;
+}
+
+.reel-icons {
+  position: absolute;
+  right: 18px;
+  top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.reel-icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-900);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+.reel-icon-btn:focus {
+  outline: none;
+  color: var(--primary-500);
+}
+.reel-icon-label {
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.reel-desc-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 16px 0 16px;
+}
+.reel-description {
+  font-size: 1rem;
+  color: var(--muted-400);
+}
+.visit-store-btn {
+  background: linear-gradient(90deg, #f87171, #fb7185);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 22px;
+  box-shadow: 0 2px 8px rgba(251,113,133,0.12);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.16s, box-shadow 0.16s;
+}
+.visit-store-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(251,113,133,0.18);
+}
+
+/* BottomNav assumed to be fixed at bottom */
+
+@media (max-width: 480px) {
+  .reel-video-placeholder {
+    height: 180px;
+    font-size: 1.3rem;
+    margin: 12px 6px 0 6px;
+  }
+  .reel-desc-row {
+    margin: 10px 6px 0 6px;
+    gap: 8px;
+  }
+  .reel-icons {
+    right: 8px;
+    top: 32px;
+    gap: 12px;
+  }
+}
 .reels-container {
   height: 100vh;
   width: 100vw;
@@ -35,6 +143,7 @@
 
 .reel-description {
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -70,4 +179,27 @@
   height: 200px;
   background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
   pointer-events: none;
+}
+
+.reel-actions {
+  position: absolute;
+  right: 10px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 3;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+}
+
+.action-item span {
+  font-size: 12px;
+  margin-top: 4px;
 }

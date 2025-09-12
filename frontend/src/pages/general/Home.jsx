@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Heart, BookmarkSimple, ChatCircle } from "@phosphor-icons/react";
 import "../../styles/Reels.css";
 import "../../styles/Home.css";
 
@@ -47,6 +48,20 @@ const Reel = ({ video }) => {
         controls={false}
       />
       <div className="overlay-gradient" />
+      <div className="reel-actions">
+        <div className="action-item">
+          <Heart size={32} />
+          <span>Like</span>
+        </div>
+        <div className="action-item">
+          <BookmarkSimple size={32} />
+          <span>Save</span>
+        </div>
+        <div className="action-item">
+          <ChatCircle size={32} />
+          <span>Comments</span>
+        </div>
+      </div>
       <div className="reel-content">
         <p className="reel-description">{video.description}</p>
         {/* ✅ Navigate to foodpartner/:id */}
